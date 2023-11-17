@@ -30,3 +30,23 @@ export const register= async(req,res)=>{
     }
    
 }
+
+export const login=async(req,res)=>{
+    try {
+        const{email,password}=req.body;
+        const user= await User.findOne({email})
+        if(!user || (!await bcrypt.compare(password,user.password))){
+            return res.status(400).json({error:'Invalid email or password'})
+        }
+        const token= generateTokenAndSetCookie(user._id,res);
+        res.status(200).json({
+            _id:user._id,
+            username:user.username,
+            email:user.email,
+            token
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+        console.log('Error in loginUser:', error.message);
+    }
+}
