@@ -50,3 +50,36 @@ export const login=async(req,res)=>{
         console.log('Error in loginUser:', error.message);
     }
 }
+
+export const updateUser=async(req,res)=>{
+try {
+    const {username,email,password}=req.body
+    const userId= req.user._id
+    const user= await User.findById(userId)
+    if(!user){
+        return res.status(404).json({error:'User not found'})
+    }
+    if(username){
+        user.username=username
+    }
+    if (email) {
+        user.email = email;
+      }
+      if(password){
+        const salt= await bcrypt.genSalt(10)
+        const hashedPassword= await bcrypt.hash(password,salt)
+        user.password=password
+      }
+      await user.save();
+      const token= generateTokenAndSetCookie(user._id,res)
+      res.status(200).json({
+        _id:user._id,
+        username:user.username,
+        email:user.email,
+        token
+      });
+} catch (error) {
+    console.error(error)
+    res.status(500).json({error:'Internal server error'})
+}
+}
