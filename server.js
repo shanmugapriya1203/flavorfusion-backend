@@ -3,6 +3,7 @@ import connectDB from './db.js'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import authRoutes from './routes/authRoute.js'
+import recipeRoute from './routes/recipeRoute.js'
 dotenv.config()
 //Connect to MongoDb
 connectDB()
@@ -15,6 +16,7 @@ app.use(express.json())
 
 //Routes
 app.use('/api/auth',authRoutes)
+app.use('/api/recipe',recipeRoute)
 
 
 

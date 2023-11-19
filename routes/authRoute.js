@@ -8,13 +8,4 @@ router.post('/login',login)
 router.post('/logout',logoutUser)
 
 router.post('/update/:id',protectRoute,updateUser)
-
-
-
-
-
-
-
-
-
 export default router
