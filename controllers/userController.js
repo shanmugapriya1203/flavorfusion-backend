@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from "../utils/helpers/generateTokenAndSetCookie.js";
 
+
 export const register= async(req,res)=>{
     try {
         const {username,email,password}=req.body;
@@ -31,6 +32,15 @@ export const register= async(req,res)=>{
    
 }
 
+export const getAllUsers=async(req,res)=>{
+    try {
+        const allUsers = await User.find({}, { password: 0 });
+        res.json(allUsers)
+    } catch (error) {
+        console.error('Error fetching all users:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
 export const login=async(req,res)=>{
     try {
         const{email,password}=req.body;
