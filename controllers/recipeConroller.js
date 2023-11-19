@@ -44,3 +44,33 @@ export const addRecipe = async (req, res) => {
 
  }
   }
+
+  export const getRecipeById = async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId;
+      const recipe = await Recipe.findById(recipeId).exec();
+  
+      if (!recipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+  
+      res.json(recipe);
+    } catch (error) {
+      console.error('Error fetching recipe:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+  export const deleteRecipeById=async(req,res)=>{
+    try {
+      const recipeId = req.params.recipeId
+      const deletedRecipe = await Recipe.findByIdAndDelete(recipeId);
+      if(!deletedRecipe){
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+      return res.json({ message: 'Recipe deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting recipe:', error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
