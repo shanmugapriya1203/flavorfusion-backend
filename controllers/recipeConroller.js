@@ -111,3 +111,45 @@ export const addRecipe = async (req, res) => {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
+
+  export const likeUnlikeRecipe = async (req, res) => {
+    try {
+      const  recipeId  = req.params.recipeId;
+      const userId = req.user._id;
+      const recipe = await Recipe.findById(recipeId);
+  
+      if (!recipe) {
+        return res.status(404).json({ error: "Recipe not found" });
+      }
+  
+      const userLikedRecipe = recipe.likes.includes(userId);
+  
+      if (userLikedRecipe) {
+        recipe.likes.pull(userId);
+        await recipe.save();
+        res.status(200).json({ message: "Recipe unliked successfully" });
+      } else {
+        recipe.likes.push(userId);
+        await recipe.save();
+        res.status(200).json({ message: "Recipe liked successfully" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+  
+  export const likedRecipes= async(req,res)=>{
+    try {
+      const userId = req.params.userId;
+  
+     
+      const likedRecipes = await Recipe.find({ likes: userId });
+  
+      res.status(200).json(likedRecipes);
+    } catch (error) {
+      console.error('Error fetching liked recipes:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  
+  }

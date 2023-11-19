@@ -38,6 +38,8 @@ const recipeSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  likes: 
+  [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
