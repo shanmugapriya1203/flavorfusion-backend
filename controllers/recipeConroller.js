@@ -28,7 +28,15 @@ export const addRecipe = async (req, res) => {
     }
   };
   
-
+  export const getAllRecipes = async (req, res) => {
+    try {
+      const recipes = await Recipe.find();
+      res.status(200).json(recipes);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
   export const getRecipesByUserId= async(req,res)=>{
  try {
     const userId = req.user._id;
@@ -60,7 +68,34 @@ export const addRecipe = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
-
+  export const updateRecipeById = async (req, res) => {
+    try {
+      const recipeId = req.params.recipeId;
+      const { name, description, ingredients, instructions, images, preparationTime } = req.body;
+  
+      const updatedRecipe = await Recipe.findByIdAndUpdate(
+        recipeId,
+        {
+          name,
+          description,
+          ingredients,
+          instructions,
+          images,
+          preparationTime,
+        },
+        { new: true }
+      );
+  
+      if (!updatedRecipe) {
+        return res.status(404).json({ error: 'Recipe not found' });
+      }
+  
+      res.json(updatedRecipe);
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
   export const deleteRecipeById=async(req,res)=>{
     try {
       const recipeId = req.params.recipeId
