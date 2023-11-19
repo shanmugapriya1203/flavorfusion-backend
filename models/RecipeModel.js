@@ -25,6 +25,10 @@ const recipeSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  cuisine: {
+    type: String, 
+
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -2,7 +2,7 @@ import User from "../models/userModel.js";
 import Recipe from './../models/RecipeModel.js';
 export const addRecipe = async (req, res) => {
     try {
-      const { name, description, ingredients, instructions, images, preparationTime, } = req.body;
+      const { name, description, ingredients, instructions, images, preparationTime,cuisine } = req.body;
       const userId = req.user._id;
   
       const user = await User.findById(userId);
@@ -19,6 +19,7 @@ export const addRecipe = async (req, res) => {
         images,
         preparationTime,
         createdBy: userId,
+        cuisine
       });
   
       res.status(201).json(newRecipe);
@@ -71,7 +72,7 @@ export const addRecipe = async (req, res) => {
   export const updateRecipeById = async (req, res) => {
     try {
       const recipeId = req.params.recipeId;
-      const { name, description, ingredients, instructions, images, preparationTime } = req.body;
+      const { name, description, ingredients, instructions, images, preparationTime ,cuisine} = req.body;
   
       const updatedRecipe = await Recipe.findByIdAndUpdate(
         recipeId,
@@ -82,6 +83,7 @@ export const addRecipe = async (req, res) => {
           instructions,
           images,
           preparationTime,
+          cuisine
         },
         { new: true }
       );
