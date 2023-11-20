@@ -18,7 +18,11 @@ app.use(express.json())
 app.use('/api/auth',authRoutes)
 app.use('/api/recipe',recipeRoute)
 
-
+app.get('/', (req, res) => {
+    console.log('Home endpoint accessed');
+   
+    res.send('Welcome to the home endpoint!');
+  });
 
 const PORT= process.env.port || 8000;
 app.listen(PORT,()=>{
